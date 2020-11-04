@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class plante {
@@ -17,6 +18,10 @@ public class plante {
 	private String couleurPlante ;
 	private Double prix;
 	private Date dateVente;
+	
+	@ManyToOne
+	private Type type ;
+	
 	public plante() {
 	super();
 	}
@@ -61,6 +66,12 @@ public class plante {
 		public String toString() {
 			return "plante [idPlante=" + idPlante + ", nomPlante=" + nomPlante + ", couleurPlante=" + couleurPlante
 					+ ", prix=" + prix + ", dateVente=" + dateVente + "]";
+		}
+		public Type getType() {
+			return type;
+		}
+		public void setType(Type type) {
+			this.type = type;
 		}
 		
 	
