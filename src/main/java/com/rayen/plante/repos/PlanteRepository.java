@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.rayen.plante.entities.plante;
 
+@RepositoryRestResource(path = "rest")
 public interface PlanteRepository extends JpaRepository<plante, Long> {
 	
 	 List<plante> findByNomPlante(String nom);
