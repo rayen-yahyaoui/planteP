@@ -5,10 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,26 +24,22 @@ public class PlanteController {
 	@Autowired
 	PlanteService planteService;
 	@RequestMapping("/showCreate")
-	public String showCreate()
+	public String showCreate(ModelMap modelMap)
 	{
-	return "createPlante";
+		modelMap.addAttribute("plante", new plante());
+		modelMap.addAttribute("mode", "new");
+		return "formPlante";
 	}
+	
 	@RequestMapping("/savePlante")
-	public String savePlante(@ModelAttribute("plante") plante plante,
-	 @RequestParam("date") String date,
-	 ModelMap modelMap) throws
-	ParseException
+	public String savePlante(@Valid plante plante,
+			 BindingResult bindingResult)
 	{
-	//conversion de la date
-	 SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-	 Date dateVente = dateformat.parse(String.valueOf(date));
-	 plante.setDateVente(dateVente);
-
-	plante savePlante = planteService.savePlante(plante);
-	String msg ="plante enregistré avec Id "+savePlante.getIdPlante();
-	modelMap.addAttribute("msg", msg);
-	return "createPlante";
+		if (bindingResult.hasErrors()) return "formPlante";
+	 planteService.savePlante(plante);
+	 return "formPlante";
 	}
+	
 	
 	@RequestMapping("/listePlantes")
 	public String listePlantes(ModelMap modelMap,
@@ -76,7 +75,8 @@ public class PlanteController {
 	{
 	plante p= planteService.getPlante(id);
 	modelMap.addAttribute("plante", p);
-	return "editerPlante";
+	modelMap.addAttribute("mode", "edit");
+	return "formPlante";
 	}
 	@RequestMapping("/updatePlante")
 	public String updatePlante(@ModelAttribute("plante") plante plante,
